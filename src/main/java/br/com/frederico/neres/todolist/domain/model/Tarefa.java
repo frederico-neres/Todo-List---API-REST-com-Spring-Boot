@@ -14,10 +14,10 @@ public class Tarefa {
     private Long id;
 
     @NotBlank
-    @Column(length = 60, nullable = false)
+    @Column(length = 60, nullable = false, unique = true)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String descricao;
 
     @Enumerated(EnumType.STRING)

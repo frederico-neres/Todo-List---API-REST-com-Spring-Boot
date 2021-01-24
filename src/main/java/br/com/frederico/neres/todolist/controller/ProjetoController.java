@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,24 +18,22 @@ public class ProjetoController {
 
     public ProjetoService projetoService;
 
-
     public ProjetoController(ProjetoService projetoService) {
         this.projetoService = projetoService;
     }
 
     @GetMapping
-    public List<Projeto> buscarTodos() {
-        return null;
+    public ResponseEntity buscarTodos() {
+        return projetoService.buscarTodos();
     }
 
     @GetMapping("/tarefas/{idProjeto}")
-    public ResponseEntity<Response<List<Tarefa>>> buscarTarefas(@PathVariable(value="idProjeto") long idProjeto) {
-        System.out.println();
+    public ResponseEntity buscarTarefas(@PathVariable(value="idProjeto") long idProjeto) {
         return projetoService.buscarTarefas(idProjeto);
     }
 
     @PostMapping
-    public Projeto salvar(@RequestBody Projeto projeto) {
-        return projetoService.salvar(projeto);
+    public ResponseEntity salvar(@Valid @RequestBody Projeto projeto, BindingResult result) {
+        return projetoService.salvar(projeto, result);
     }
 }

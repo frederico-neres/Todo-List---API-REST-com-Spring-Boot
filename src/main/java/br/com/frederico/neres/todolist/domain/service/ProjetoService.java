@@ -7,6 +7,7 @@ import br.com.frederico.neres.todolist.domain.repository.ProjetoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,13 @@ public class ProjetoService {
     }
 
 
-    public List<Projeto> buscarTodos() {
-        return null;
+    public ResponseEntity buscarTodos() {
+        Response<List<Projeto>> response = new Response<List<Projeto>>();
+
+        List<Projeto> projeto = projetoRepository.findAll();
+        response.setData(projeto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     public ResponseEntity buscarTarefas(Long idProjeto) {
@@ -38,7 +44,37 @@ public class ProjetoService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    public Projeto salvar(Projeto projeto) {
-        return projetoRepository.save(projeto);
+    public ResponseEntity salvar(Projeto projetoInput, BindingResult result) {
+        Response<Projeto> response = new Response<Projeto>();
+        Boolean hasErrorsBadRequest = false;
+
+        if(result.hasErrors()) {
+            hasErrorsBadRequest = true;
+
+            result.getAllErrors().forEach(erro -> {
+                response.getErrors().add(erro.getDefaultMessage());
+            });
+        }
+        boolean existsByTitulo = projetoRepository.existsByTitulo(projetoInput.getTitulo());
+        boolean existsByDescricao = projetoRepository.existsByDescricao(projetoInput.getDescricao());
+
+        if(existsByTitulo) {
+            response.getErrors().add("Já existe um projeto com esse título!");
+            hasErrorsBadRequest = true;
+        }
+
+        if(existsByDescricao) {
+            response.getErrors().add("Já existe um projeto com essa descrição!");
+            hasErrorsBadRequest = true;
+        }
+
+        if(hasErrorsBadRequest == true) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        Projeto projeto = projetoRepository.save(projetoInput);
+        response.setData(projeto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

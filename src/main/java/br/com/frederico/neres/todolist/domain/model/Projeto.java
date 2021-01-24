@@ -13,12 +13,12 @@ public class Projeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(length = 60, nullable = false)
+    @NotBlank(message = "Título não pode ser vazio!")
+    @Column(length = 60, nullable = false, unique = true)
     private String titulo;
 
-    @NotBlank
-    @Column(nullable = false)
+    @NotBlank(message = "Descrição não pode ser vazio")
+    @Column(nullable = false, unique = true)
     private String descricao;
 
     @OneToMany(mappedBy = "projeto")
