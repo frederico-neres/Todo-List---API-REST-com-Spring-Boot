@@ -1,8 +1,12 @@
 package br.com.frederico.neres.todolist.controller;
 
+import br.com.frederico.neres.todolist.controller.response.Response;
 import br.com.frederico.neres.todolist.domain.model.Projeto;
 import br.com.frederico.neres.todolist.domain.model.Tarefa;
 import br.com.frederico.neres.todolist.domain.repository.ProjetoRepository;
+import br.com.frederico.neres.todolist.domain.service.ProjetoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,21 +15,26 @@ import java.util.List;
 @RequestMapping("/projeto")
 public class ProjetoController {
 
+    public ProjetoService projetoService;
 
-    public ProjetoRepository projetoRepository;
 
-    public ProjetoController(ProjetoRepository projetoRepository) {
-        this.projetoRepository = projetoRepository;
+    public ProjetoController(ProjetoService projetoService) {
+        this.projetoService = projetoService;
+    }
+
+    @GetMapping
+    public List<Projeto> buscarTodos() {
+        return null;
     }
 
     @GetMapping("/tarefas/{idProjeto}")
-    public List<Tarefa> buscarTarefas(@PathVariable(value="idProjeto") long idProjeto) {
-        Projeto projeto = projetoRepository.findById(idProjeto).orElseThrow(()-> new RuntimeException("Projeto Não encontrado!"));
-        return projeto.getTarefas();
+    public ResponseEntity<Response<List<Tarefa>>> buscarTarefas(@PathVariable(value="idProjeto") long idProjeto) {
+        System.out.println();
+        return projetoService.buscarTarefas(idProjeto);
     }
 
     @PostMapping
     public Projeto salvar(@RequestBody Projeto projeto) {
-        return projetoRepository.save(projeto);
+        return projetoService.salvar(projeto);
     }
 }
