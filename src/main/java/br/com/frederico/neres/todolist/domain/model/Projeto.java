@@ -9,6 +9,15 @@ import java.util.Objects;
 
 @Entity
 public class Projeto {
+
+    public Projeto() {
+    }
+
+    private Projeto(String titulo, String descricao) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +33,27 @@ public class Projeto {
     @OneToMany(mappedBy = "projeto")
     @JsonManagedReference
     private List<Tarefa> tarefas;
+
+
+    public static class Builder {
+        private String titulo;
+        private String descricao;
+
+        public Builder titulo(String titulo) {
+            this.titulo = titulo;
+            return this;
+        }
+
+        public Builder descricao(String descricao) {
+            this.descricao = descricao;
+            return this;
+        }
+
+        public Projeto build()
+        {
+           return new Projeto(titulo, descricao);
+        }
+    }
 
     public Long getId() {
         return id;

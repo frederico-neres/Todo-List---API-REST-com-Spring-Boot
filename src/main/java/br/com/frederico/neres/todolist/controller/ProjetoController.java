@@ -5,6 +5,7 @@ import br.com.frederico.neres.todolist.domain.model.Projeto;
 import br.com.frederico.neres.todolist.domain.model.Tarefa;
 import br.com.frederico.neres.todolist.domain.repository.ProjetoRepository;
 import br.com.frederico.neres.todolist.domain.service.ProjetoService;
+import br.com.frederico.neres.todolist.dto.input.ProjetoInputDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity salvar(@Valid @RequestBody Projeto projeto, BindingResult result) {
-        return projetoService.salvar(projeto, result);
+    public ResponseEntity salvar(@Valid @RequestBody ProjetoInputDTO projetoInputDTO, BindingResult result) {
+        return projetoService.salvar(projetoInputDTO, result);
     }
 }
