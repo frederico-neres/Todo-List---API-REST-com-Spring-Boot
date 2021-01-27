@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +37,10 @@ public class ProjetoService {
         response.setData(projetoOutputDTOList);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    public Projeto buscarPeloId(Long id) {
+        return projetoRepository.findById(id).orElse(null);
     }
 
     public ResponseEntity buscarTarefas(Long idProjeto) {

@@ -17,6 +17,7 @@ public class Tarefa {
     @Column(length = 60, nullable = false, unique = true)
     private String titulo;
 
+    @NotBlank
     @Column(nullable = false, unique = true)
     private String descricao;
 
@@ -28,6 +29,34 @@ public class Tarefa {
     @JsonBackReference
     private Projeto projeto;
 
+
+    public Tarefa() {
+    }
+
+    private Tarefa(String titulo, String descricao) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+    }
+
+    public static class Builder {
+        private String titulo;
+        private String descricao;
+
+        public Builder titulo(String titulo) {
+            this.titulo = titulo;
+            return this;
+        }
+
+        public Builder descricao(String descricao) {
+            this.descricao = descricao;
+            return this;
+        }
+
+        public Tarefa build() {
+            return new Tarefa(this.titulo, this.descricao);
+        }
+
+    }
 
     public Long getId() {
         return id;

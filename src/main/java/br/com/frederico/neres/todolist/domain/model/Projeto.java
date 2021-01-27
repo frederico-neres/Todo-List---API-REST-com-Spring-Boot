@@ -26,7 +26,7 @@ public class Projeto {
     @Column(length = 60, nullable = false, unique = true)
     private String titulo;
 
-    @NotBlank(message = "Descrição não pode ser vazio")
+    @NotBlank(message = "Descrição não pode ser vazio!")
     @Column(nullable = false, unique = true)
     private String descricao;
 
